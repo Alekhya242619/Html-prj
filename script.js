@@ -1,27 +1,27 @@
-function updateClock() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    const expenses = { expenses, tojson };
+    const categories = {};
+    
+    expenses.forEach(expense => {
+        if (categories[expense[3]]) {
+            categories[expense[3]] += expense[2];
+        } else {
+            categories[expense[3]] = expense[2];
+        }
+    });
 
-    // Update the analog clock hands
-    const hourHand = document.getElementById('hour');
-    const minuteHand = document.getElementById('minute');
-    const secondHand = document.getElementById('second');
+    const data = {
+        labels: Object.keys(categories),
+        datasets: [{
+            label: 'Expenses',
+            data: Object.values(categories),
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+        }]
+    };
 
-    const hourDeg = (hours % 12) * 30 + (minutes / 60) * 30;
-    const minuteDeg = (minutes * 6) + (seconds / 60) * 6;
-    const secondDeg = seconds * 6;
-
-    hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
-    minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-    secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
-
-    // Update the digital time display
-    const digitalTime = document.getElementById('digital-time');
-    digitalTime.textContent = now.toLocaleTimeString();
-}
-
-// Update the clock every second
-setInterval(updateClock, 1000);
-updateClock(); // Initial call to set the clock immediately
+    new Chart(ctx, {
+        type: 'pie',
+        data: data
+    });
+});
